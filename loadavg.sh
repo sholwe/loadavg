@@ -44,7 +44,7 @@ if [ "x"$PROGNAMEtmp != "x" ]; then
   PROGNAME='dnetc'
 fi
 if [ "x"$MAXLOADtmp != "x" ]; then
-  MAXLOAD=$MAXLOADtmp
+  MAXLOAD=`echo $MAXLOADtmp * 100 | bc | cut -f1 -d\.`
   unset MAXLOADtmp
   else
     if [ $OS"x" = "Linuxx" ]; then
