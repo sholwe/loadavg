@@ -11,6 +11,6 @@ Simple shell script to SIGstop/start given program based on overall system load
 
 *To Do:*
 
-* Implement "only send notices when not quiet if state has changed", so it doesn't tell you what it does every refresh.
+<del>* Implement "only send notices when not quiet if state has changed", so it doesn't tell you what it does every refresh.</del> Done.
 
 * Make more compatible by reducing the BASHisms.
