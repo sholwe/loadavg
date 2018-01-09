@@ -7,7 +7,7 @@
 #seconds refresh.  Please feel free to suggest additions/changes/etc.
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 OS=`uname -s`
-DONOW=0
+DID=0
 QUIET=0
 PROGNAME=0
 while [[ $# -ge 1 ]]; do
@@ -84,33 +84,35 @@ while true; do
     CURLOAD=`echo $LOAD" * 100" | bc | cut -f1 -d\.`
   fi
   if [ $CURLOAD -gt $MAXLOAD ]; then
-    if [ $QUIET"x" == "0x" ]; then 
+    DID=1
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
       echo -n "Load of $LOAD is over $TOTALLOAD, stopping"
     fi
     for PIDS in $MYPIDS; do
-      if [ $QUIET"x" == "0x" ]; then 
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
         echo -n " $PIDS"
       fi
       kill -s STOP $PIDS
     done
-    if [ $QUIET"x" == "0x" ]; then 
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
       echo "."
     fi
-    DID=1
+    DIDLAST=1
   else
-    if [ $QUIET"x" == "0x" ]; then 
+    DID=2
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
       echo -n "Load of $LOAD is good, enabling:"
     fi
     for PIDS in $MYPIDS; do
-      if [ $QUIET"x" == "0x" ]; then 
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
         echo -n " $PIDS"
       fi
       kill -s CONT $PIDS
     done
-    if [ $QUIET"x" == "0x" ]; then 
+    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
       echo "."
     fi
-    DID=2
+    DIDLAST=2
   fi
 sleep $SLEEP
 done
