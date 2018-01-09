@@ -44,16 +44,18 @@ if [ "x"$PROGNAMEtmp != "x" ]; then
   PROGNAME='dnetc'
 fi
 if [ "x"$MAXLOADtmp != "x" ]; then
-  MAXLOAD=`echo $MAXLOADtmp * 100 | bc | cut -f1 -d\.`
-  unset MAXLOADtmp
-  else
+  MAXLOAD=`echo $MAXLOADtmp" * 100" | bc | cut -f1 -d\.`
+else
     if [ $OS"x" = "Linuxx" ]; then
       NUMCPUS=`grep processor /proc/cpuinfo | wc -l`
+      MAXLOADtmp=$NUMCPUS
       MAXLOAD=`echo $NUMCPUS" * 100" | bc`
     else
       MAXLOAD=100
     fi
 fi 
+TOTALLOAD=$MAXLOADtmp
+unset MAXLOADtmp
 if [ "x"$SLEEPtmp != "x" ]; then
   SLEEP=$SLEEPtmp
   unset SLEEPtmp
@@ -83,7 +85,7 @@ while true; do
   fi
   if [ $CURLOAD -gt $MAXLOAD ]; then
     if [ $QUIET"x" == "0x" ]; then 
-      echo -n "Load of $LOAD is over $MAXLOAD, stopping"
+      echo -n "Load of $LOAD is over $TOTALLOAD, stopping"
     fi
     for PIDS in $MYPIDS; do
       if [ $QUIET"x" == "0x" ]; then 
