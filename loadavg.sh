@@ -85,34 +85,38 @@ while true; do
   fi
   if [ $CURLOAD -gt $MAXLOAD ]; then
     DID=1
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-      echo -n "Load of $LOAD is over $TOTALLOAD, stopping"
-    fi
-    for PIDS in $MYPIDS; do
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-        echo -n " $PIDS"
+    if [ $DIDLAST"x" != $DID"x" ]; then
+      if [ $QUIET"x" == "0x" ]; then 
+        echo -n "Load of $LOAD is over $TOTALLOAD, stopping"
       fi
-      kill -s STOP $PIDS
-    done
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-      echo "."
+      for PIDS in $MYPIDS; do
+        if [ $QUIET"x" == "0x" ]; then 
+          echo -n " $PIDS"
+        fi
+        kill -s STOP $PIDS
+      done
+      if [ $QUIET"x" == "0x" ]; then 
+        echo "."
+      fi
+      DIDLAST=1
     fi
-    DIDLAST=1
   else
     DID=2
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-      echo -n "Load of $LOAD is good, enabling:"
-    fi
-    for PIDS in $MYPIDS; do
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-        echo -n " $PIDS"
+    if [ $DIDLAST"x" != $DID"x" ]; then
+      if [ $QUIET"x" == "0x" ]; then 
+        echo -n "Load of $LOAD is good, enabling:"
       fi
-      kill -s CONT $PIDS
-    done
-    if [ $QUIET"x" == "0x" ] && [ $DIDLAST"x" != $DID"x" ]; then 
-      echo "."
-    fi
+      for PIDS in $MYPIDS; do
+        if [ $QUIET"x" == "0x" ]; then 
+          echo -n " $PIDS"
+        fi
+        kill -s CONT $PIDS
+      done
+      if [ $QUIET"x" == "0x" ]; then 
+        echo "."
+      fi
     DIDLAST=2
+    fi
   fi
 sleep $SLEEP
 done
